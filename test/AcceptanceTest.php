@@ -19,7 +19,7 @@ class AcceptanceTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $messageHandler = function ($msg) {
+        $messageHandler = function (Swift_Message $msg) {
             $this->messagesSent[] = $msg;
         };
 
@@ -75,7 +75,7 @@ class TestableBirthdayService extends BirthdayService
         return $this;
     }
 
-    protected function sendMessage($subject, $body, $recipient)
+    protected function sendMessage(Swift_Message $msg)
     {
         $callable = $this->callback;
         $callable($msg);

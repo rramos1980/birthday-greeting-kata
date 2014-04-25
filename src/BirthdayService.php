@@ -2,11 +2,6 @@
 
 class BirthdayService
 {
-    /**
-     * @var Swift_Mailer
-     */
-    private $mailer;
-
     private $employeeRepository;
     private $mailerService;
 
@@ -29,14 +24,22 @@ class BirthdayService
 
     private function sendOneGreeting($employee)
     {
+        $message = $this->buildMessage($employee);
+        $this->sendMessage($message);
+    }
+
+    private function buildMessage($employee)
+    {
         $recipient = $employee->getEmail();
         $body = sprintf('Happy Birthday, dear %s!', $employee->getFirstName());
         $subject = 'Happy Birthday!';
-        $this->sendMessage($subject, $body, $recipient);
+        $message = $this->mailerService->buildMessage('sender@here.com', $subject, $body, $recipient);
+
+        return $message;
     }
 
-    protected function sendMessage($subject, $body, $recipient)
+    protected function sendMessage($message)
     {
-        $this->mailerService->sendMessage('sender@here.com', $subject, $body, $recipient);
+        $this->mailerService->sendMessage($message);
     }
 }

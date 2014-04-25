@@ -10,9 +10,8 @@ class MailerService
         $this->smtpPort = $smtpPort;
     }
 
-    public function sendMessage($sender, $subject, $body, $recipient)
+    public function buildMessage($sender, $subject, $body, $recipient)
     {
-        // Construct the message
         $msg = Swift_Message::newInstance($subject);
         $msg
             ->setFrom($sender)
@@ -20,12 +19,10 @@ class MailerService
             ->setBody($body)
         ;
 
-        // Send the message
-        $this->doSendMessage($msg);
+        return $msg;
     }
 
-    // made protected for testing :-(
-    protected function doSendMessage(Swift_Message $msg)
+    public function sendMessage($msg)
     {
         $this->getMailer()->send($msg);
     }
