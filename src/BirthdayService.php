@@ -13,12 +13,10 @@ class BirthdayService
 
     public function sendGreetings(XDate $xDate)
     {
-        $employees = $this->employeeRepository->findAll();
+        $employees = $this->employeeRepository->findByBirthDayDate($xDate);
 
         foreach ($employees as $employee) {
-            if ($employee->isBirthday($xDate)) {
-                $this->sendOneGreeting($employee);
-            }
+            $this->sendOneGreeting($employee);
         }
     }
 
