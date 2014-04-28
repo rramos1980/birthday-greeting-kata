@@ -3,12 +3,12 @@
 class BirthdayService
 {
     private $employeeRepository;
-    private $mailerService;
+    private $notificationService;
 
-    public function __construct(EmployeeRepository $employeeRepository, MailerService $mailerService)
+    public function __construct(EmployeeRepository $employeeRepository, NotificationService $notificationService)
     {
         $this->employeeRepository = $employeeRepository;
-        $this->mailerService = $mailerService;
+        $this->notificationService = $notificationService;
     }
 
     public function sendGreetings(XDate $xDate)
@@ -16,28 +16,7 @@ class BirthdayService
         $employees = $this->employeeRepository->findByBirthDayDate($xDate);
 
         foreach ($employees as $employee) {
-            $this->sendOneGreeting($employee);
+            $this->notificationService->sendGreetingTo($employee);
         }
-    }
-
-    private function sendOneGreeting($employee)
-    {
-        $message = $this->buildMessage($employee);
-        $this->sendMessage($message);
-    }
-
-    private function buildMessage($employee)
-    {
-        $recipient = $employee->getEmail();
-        $body = sprintf('Happy Birthday, dear %s!', $employee->getFirstName());
-        $subject = 'Happy Birthday!';
-        $message = $this->mailerService->buildMessage('sender@here.com', $subject, $body, $recipient);
-
-        return $message;
-    }
-
-    protected function sendMessage($message)
-    {
-        $this->mailerService->sendMessage($message);
     }
 }

@@ -2,7 +2,5 @@
 
 interface MailerService
 {
-    public function buildMessage($sender, $subject, $body, $recipient);
-
-    public function sendMessage($msg);
+    public function sendMessage($sender, $subject, $body, $recipient);
 }

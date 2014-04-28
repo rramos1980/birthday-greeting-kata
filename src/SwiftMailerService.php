@@ -10,21 +10,11 @@ class SwiftMailerService implements MailerService
         $this->smtpPort = $smtpPort;
     }
 
-    public function buildMessage($sender, $subject, $body, $recipient)
+    public function sendMessage($sender, $subject, $body, $recipient)
     {
-        $msg = Swift_Message::newInstance($subject);
-        $msg
-            ->setFrom($sender)
-            ->setTo([$recipient])
-            ->setBody($body)
-        ;
-
-        return $msg;
-    }
-
-    public function sendMessage($msg)
-    {
-        $this->getMailer()->send($msg);
+        $this->getMailer()->send(
+            $this->buildMessage($sender, $subject, $body, $recipient)
+        );
     }
 
     private function getMailer()
@@ -36,5 +26,17 @@ class SwiftMailerService implements MailerService
         }
 
         return $this->mailer;
+    }
+
+    private function buildMessage($sender, $subject, $body, $recipient)
+    {
+        $msg = Swift_Message::newInstance($subject);
+        $msg
+            ->setFrom($sender)
+            ->setTo([$recipient])
+            ->setBody($body)
+        ;
+
+        return $msg;
     }
 }
